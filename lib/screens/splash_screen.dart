@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:pokemon_app/providers/pokemon_provider.dart';
 import 'package:pokemon_app/screens/pokemon_list_screen.dart';
 import 'package:provider/provider.dart';
@@ -33,11 +32,10 @@ class _SplashScreenState extends State<SplashScreen> {
     startTimer();
   }
 
-
   /// It starts a timer that will call the navigateToHome() function after 2
   /// seconds.
   void startTimer() {
-    _timer = Timer(const Duration(seconds: 2), () {
+    _timer = Timer(const Duration(seconds: 3), () {
       navigateToHome();
     });
   }
@@ -49,11 +47,12 @@ class _SplashScreenState extends State<SplashScreen> {
     }
     super.dispose();
   }
+
   /// It navigates to the LaunchesListScreen and removes all the previous screens
   /// from the stack.
   void navigateToHome() async {
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        PokemonListScreen.routeName, (route) => false);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(PokemonListScreen.routeName, (route) => false);
   }
 
   @override

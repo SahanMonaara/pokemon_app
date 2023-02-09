@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 /// > This class contains static methods that return a color
 class AppColors {
   static const Color shadowColor = Color(0XFF3A5DA8);
-  static const Color black = Color(0X00000000);
+  static const Color black = Color(0XFF000000);
   static const Color bgColor = Colors.white;
 
-  static const Color pokemonTypeFireColor = Colors.deepOrangeAccent;
+  static const Color pokemonTypeFireColor = Color(0XFFf19066);
   static const Color pokemonTypeGrassColor = Colors.lightGreen;
   static const Color pokemonTypePoisonColor = Colors.deepPurple;
   static const Color pokemonTypeFlyingColor = Colors.lightBlueAccent;
   static const Color pokemonTypeWaterColor = Colors.blueAccent;
   static const Color pokemonTypeBugColor = Color(0xFF4F6921);
-  static const Color pokemonTypeNormalColor = Color(0xFFECE8C9);
+  static const Color pokemonTypeNormalColor = Color(0xFF5F1939);
   static const Color pokemonTypeFightingColor = Color(0xFF9F6457);
   static const Color pokemonTypeElectricColor = Color(0xFFECEA39);
   static const Color pokemonTypeFairyColor = Color(0xFFD189E0);
@@ -35,3 +35,24 @@ class AppColors {
   static const Color generationVIIColor = Color(0xFF91705A);
   static const Color generationVIIIColor = Color(0xFF9B6831);
 }
+
+Map<String, Color> pokemonTypeColors = {
+  'fire': AppColors.pokemonTypeFireColor,
+  'grass': AppColors.pokemonTypeGrassColor,
+  'water': AppColors.pokemonTypeWaterColor,
+  'bug': AppColors.pokemonTypeBugColor,
+  'flying': AppColors.pokemonTypeFlyingColor,
+  'poison': AppColors.pokemonTypePoisonColor,
+  'electric': AppColors.pokemonTypeElectricColor,
+  'fighting': AppColors.pokemonTypeFightingColor,
+  'normal': AppColors.pokemonTypeNormalColor,
+  'ground': AppColors.pokemonTypeGroundColor,
+  'rock': AppColors.pokemonTypeRockColor,
+  'psychic': AppColors.pokemonTypePsychicColor,
+  'fairy': AppColors.pokemonTypeFairyColor,
+  'steel': AppColors.pokemonTypeSteelColor,
+  'ghost': AppColors.pokemonTypeGhostColor,
+  'dragon': AppColors.pokemonTypeDragonColor,
+  'dark': AppColors.pokemonTypeDarkColor,
+  'ice': AppColors.pokemonTypeIceColor,
+};

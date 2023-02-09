@@ -1,7 +1,20 @@
-import 'package:pokemon_app/models/generation/generation.dart';
+import 'package:pokemon_app/models/dream_world.dart';
 
-class GenerationVIII<T> extends Generation<T> {
-  final T icons;
+class GenerationViii {
+  DreamWorld? icons;
 
-  GenerationVIII(this.icons);
+  GenerationViii({this.icons});
+
+  GenerationViii.fromJson(Map<String, dynamic> json) {
+    icons =
+    json['icons'] != null ? DreamWorld.fromJson(json['icons']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (icons != null) {
+      data['icons'] = icons!.toJson();
+    }
+    return data;
+  }
 }

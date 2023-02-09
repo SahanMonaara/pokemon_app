@@ -4,7 +4,7 @@
 class URL {
   static String SERVER = "https://pokeapi.co/api/v2";
 
-  static String GET_POKEMON_LIST = "$SERVER/pokemon?limit=151&offset=0";
+  static String GET_POKEMON_LIST = "$SERVER/pokemon?limit=50&offset=0";
 
   static String GET_POKEMON_DETAILS = "$SERVER/pokemon/{id}";
 

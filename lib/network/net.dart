@@ -1,5 +1,3 @@
-// ignore_for_file: non_constant_identifier_names
-// ignore: constant_identifier_names
 import 'dart:convert';
 import '../helpers/app_logger.dart';
 import 'net_exception.dart';
@@ -7,8 +5,7 @@ import 'net_result.dart';
 import 'package:http/http.dart' as http;
 import 'network_error_handler.dart';
 
-// ignore: constant_identifier_names
-enum NetMethod { GET, POST, DELETE, PUT, MULTIPART }
+enum NetMethod { get, post, delete, put, multipart }
 
 class Net {
   String url;
@@ -37,22 +34,22 @@ class Net {
     this.excludeToken = false,
   });
 
-  Future<Result> perform() async {
+  Future<NetResult> perform() async {
     http.Response response;
     switch (method) {
-      case NetMethod.GET:
+      case NetMethod.get:
         response = await get();
         break;
-      case NetMethod.POST:
+      case NetMethod.post:
         response = await post();
         break;
-      case NetMethod.PUT:
+      case NetMethod.put:
         response = await put();
         break;
-      case NetMethod.DELETE:
+      case NetMethod.delete:
         response = await delete();
         break;
-      case NetMethod.MULTIPART:
+      case NetMethod.multipart:
         response = await multiPart();
         break;
     }
@@ -253,8 +250,8 @@ class Net {
   ///
   /// Returns:
   ///   A Future<Result>
-  Future<Result> isOk(http.Response response) async {
-    Result result = Result();
+  Future<NetResult> isOk(http.Response response) async {
+    NetResult result = NetResult();
     result.statusCode = response.statusCode;
     result.net = this;
     result.token = response.headers['authorization'];
@@ -288,7 +285,7 @@ class Net {
       return await result.net!.perform();
     }
 
-    result.result = response.body;
+    result.netResult = response.body;
     return result;
   }
 

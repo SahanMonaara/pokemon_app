@@ -2,8 +2,8 @@ import 'net_exception.dart';
 import 'net.dart';
 
 /// It's a class that holds the result of a network request
-class Result<Type> {
-  Type? result;
+class NetResult<Type> {
+  Type? netResult;
   NetException? exception;
   int? statusCode;
   Net? net;

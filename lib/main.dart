@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pokemon_app/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
-
 import 'common/app_providers.dart';
 import 'common/app_routes.dart';
 
@@ -18,9 +17,7 @@ class MyApp extends StatelessWidget {
       providers: AppProviders.providers,
       child: MaterialApp(
         title: 'Pokemon',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+        theme: ThemeData(fontFamily: 'Lato'),
         routes: AppRoutes.routes,
         initialRoute: SplashScreen.routeName,
       ),

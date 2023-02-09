@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:pokemon_app/models/single_pokemon.dart';
+import 'package:pokemon_app/providers/pokemon_provider.dart';
 import 'package:pokemon_app/screens/widgets/pokemon_card.dart';
-import '../models/api_resource.dart';
-import '../models/pokedex.dart';
+import 'package:provider/provider.dart';
+import '../common/app_assets.dart';
+import '../shimmers/card_shimmer.dart';
 
 class PokemonListScreen extends StatefulWidget {
-
   static const routeName = '/pokemon-list-screen';
+
   const PokemonListScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  _PokemonListScreenState createState() => _PokemonListScreenState();
+  PokemonListScreenState createState() => PokemonListScreenState();
 }
 
-class _PokemonListScreenState extends State<PokemonListScreen> {
+class PokemonListScreenState extends State<PokemonListScreen> {
   @override
   void initState() {
     super.initState();
@@ -25,11 +28,11 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
     super.dispose();
   }
 
-  Widget _buildPokemonGrid(List<APIResource> data) {
+  Widget _buildPokemonGrid(List<SinglePokemon>? allPokemon) {
     return SliverPadding(
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
       sliver: SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 8,
           mainAxisSpacing: 8,
@@ -37,44 +40,25 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
         ),
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
-            final pokemon = data[index];
+            final pokemon = allPokemon[index];
             return IndexedSemantics(
                 index: index,
-                child: PokemonCard(
-                    key: ValueKey(index), pokemonID: pokemon.id.toString()));
+                child: PokemonCard(key: ValueKey(index), pokemon: pokemon));
           },
           addSemanticIndexes: true,
-          childCount: data.length,
+          childCount: allPokemon!.length,
         ),
       ),
     );
   }
 
-  _buildHeader(Pokedex pokedex) {
-    return SliverToBoxAdapter(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(pokedex.name,
-                style: TextStyle(
-                    fontSize: 26, fontWeight: FontWeight.w600, height: 2)),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Semantics(
-              excludeSemantics: true,
-              child: Text(
-                pokedex.description,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-            ),
-          ),
-        ],
+  _buildHeader() {
+    return SliverAppBar(
+      centerTitle: true,
+      backgroundColor: Colors.white,
+      title: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 110.0),
+        child: Image.asset(AppAssets.logo),
       ),
     );
   }
@@ -82,37 +66,29 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Pokemon'),
-      ),
-      //   body:   CustomScrollView(
-      // semanticChildCount: snapshot.data!.pokemonEntries.length,
-      //   slivers: [
-      //     _buildHeader(snapshot.data!),
-      //     _buildPokemonGrid(snapshot.data!.pokemonEntries)
-      //
-      // ],
-      // ));
+      backgroundColor: Colors.white,
+      body: Consumer<PokemonProvider>(builder: (context, pokemonProvider, _) {
+        if (pokemonProvider.isDataLoading) {
+          return const Padding(
+              padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+              child: Center(child: TripCardShimmer()));
+        }
+        if (pokemonProvider.pokemonList?.results?.length == null) {
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: Text('No data'),
+            ),
+          );
+        }
+        return CustomScrollView(
+          semanticChildCount: pokemonProvider.pokemonList?.results?.length,
+          slivers: [
+            _buildHeader(),
+            _buildPokemonGrid(pokemonProvider.allPokemon)
+          ],
+        );
+      }),
     );
-
-    //   StreamBuilder<Pokedex>(
-    //     stream: bloc.stream,
-    //     initialData: bloc.pokedex,
-    //     builder: (context, snapshot) {
-    //       if (snapshot.hasData) {
-    //
-    //       }
-    //       if (snapshot.hasError) {
-    //         return Container(
-    //           child: Text(snapshot.error.toString()),
-    //         );
-    //       }
-    //       return Container(
-    //         alignment: Alignment.center,
-    //         child: CircularProgressIndicator(),
-    //       );
-    //     },
-    //   ),
-    // );
   }
 }

@@ -1,8 +1,8 @@
-// ignore_for_file: constant_identifier_names
 import 'dart:convert';
-import 'package:pokemon_app/models/pokemon.dart';
 
 import '../helpers/app_logger.dart';
+import '../models/pokemon_list.dart';
+import '../models/single_pokemon.dart';
 import '../network/net_exception.dart';
 import '../network/net.dart';
 import '../network/net_result.dart';
@@ -10,7 +10,6 @@ import '../network/net_url.dart';
 
 class PokemonService {
   static final PokemonService _singleton = PokemonService._internal();
-  static const String MAX_RESULTS_PER_PAGE = "20";
 
   factory PokemonService() {
     return _singleton;
@@ -22,19 +21,19 @@ class PokemonService {
   ///
   /// Returns:
   ///   Result object
-  Future<Result> fetchPokemonList() async {
-    Result result = Result();
+  Future<NetResult> fetchPokemonList() async {
+    NetResult result = NetResult();
     try {
       var net = Net(
         url: URL.GET_POKEMON_LIST,
-        method: NetMethod.GET,
+        method: NetMethod.get,
       );
 
       result = await net.perform();
-      Log.debug("result is **** ${result.result}");
+      Log.debug("result is **** ${result.netResult}");
 
-      if (result.exception == null && result.result != "") {
-        // result.result = launchFromJson(result.result);
+      if (result.exception == null && result.netResult != "") {
+        result.netResult = PokemonList.fromJson(jsonDecode(result.netResult));
       }
       return result;
     } catch (err) {
@@ -54,20 +53,20 @@ class PokemonService {
   ///
   /// Returns:
   ///   Result object
-  Future<Result> fetchPokemonDetails(String id) async {
-    Result result = Result();
+  Future<NetResult> fetchPokemonDetails(String id) async {
+    NetResult result = NetResult();
     try {
       var net = Net(
           url: URL.GET_POKEMON_DETAILS,
-          method: NetMethod.GET,
+          method: NetMethod.get,
           pathParam: {'{id}': id});
 
       result = await net.perform();
-      Log.debug("result is **** ${result.result}");
+      Log.debug("result is **** ${result.netResult}");
 
-      if (result.exception == null && result.result != "") {
-        var data = json.decode(result.result);
-        // result.result = Pokemon.fromJson(data);
+      if (result.exception == null && result.netResult != "") {
+        var data = json.decode(result.netResult);
+        result.netResult = SinglePokemon.fromJson(data);
       }
       return result;
     } catch (err) {

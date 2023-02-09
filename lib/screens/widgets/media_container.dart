@@ -2,11 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../models/media/image_media.dart';
-import '../../models/media/media.dart';
-
 class MediaContainer extends StatelessWidget {
-  final Media? media;
+  final String? media;
   final BoxFit? fit;
 
   const MediaContainer({
@@ -18,22 +15,22 @@ class MediaContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (media == null) return Container();
-    if (media is ImageMedia) return _buildImageContainer();
+    if (media != null) return _buildImageContainer();
     return Container();
   }
 
   Widget _buildImageContainer() {
-    if (isSVG(media!.url!)) {
+    if (isSVG(media!)) {
       return Padding(
-        padding: EdgeInsets.all(0),
+        padding: const EdgeInsets.all(0),
         child: SvgPicture.network(
-          media!.url!,
+          media!,
           fit: fit ?? BoxFit.contain,
         ),
       );
     }
     return CachedNetworkImage(
-      imageUrl: media!.url!,
+      imageUrl: media!,
       fit: fit,
       errorWidget: (context, _, __) => Container(),
     );

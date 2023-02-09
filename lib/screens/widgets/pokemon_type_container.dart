@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../models/pokemon_type.dart';
-import '../type_colors.dart';
+import '../../common/app_colors.dart';
+import '../../models/types.dart';
 
 class PokemonTypeContainer extends StatelessWidget {
   const PokemonTypeContainer({
@@ -9,7 +8,7 @@ class PokemonTypeContainer extends StatelessWidget {
     required this.type,
     this.size = 16,
   }) : super(key: key);
-  final PokemonType type;
+  final Types type;
   final double size;
 
   @override
@@ -20,13 +19,13 @@ class PokemonTypeContainer extends StatelessWidget {
         maxHeight: size,
         minWidth: size * 3,
       ),
-      padding: EdgeInsets.all(2),
+      padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(3),
-        color: pokemonTypeColors[type.id]!.withOpacity(0.6),
+        color: pokemonTypeColors[type.type!.name]!.withOpacity(0.5),
       ),
       child: Text(
-        type.label.toUpperCase(),
+        type.type!.name!.toUpperCase(),
         maxLines: 1,
       ),
     );

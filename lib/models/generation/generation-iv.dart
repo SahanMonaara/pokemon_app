@@ -1,13 +1,35 @@
-import 'generation.dart';
+import 'generation_colors.dart';
 
-class GenerationIV<T> extends Generation<T> {
-  final T diamondPearl;
-  final T heartGoldSoulSilver;
-  final T platinum;
+class GenerationIv {
+  DiamondPearl? diamondPearl;
+  DiamondPearl? heartGoldSoulSilver;
+  DiamondPearl? platinum;
 
-  GenerationIV({
-    required this.diamondPearl,
-    required this.heartGoldSoulSilver,
-    required this.platinum,
-  });
+  GenerationIv({this.diamondPearl, this.heartGoldSoulSilver, this.platinum});
+
+  GenerationIv.fromJson(Map<String, dynamic> json) {
+    diamondPearl = json['diamond-pearl'] != null
+        ? DiamondPearl.fromJson(json['diamond-pearl'])
+        : null;
+    heartGoldSoulSilver = json['heartgold-soulsilver'] != null
+        ? DiamondPearl.fromJson(json['heartgold-soulsilver'])
+        : null;
+    platinum = json['platinum'] != null
+        ? DiamondPearl.fromJson(json['platinum'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (diamondPearl != null) {
+      data['diamond-pearl'] = diamondPearl!.toJson();
+    }
+    if (heartGoldSoulSilver != null) {
+      data['heartgold-soulsilver'] = heartGoldSoulSilver!.toJson();
+    }
+    if (platinum != null) {
+      data['platinum'] = platinum!.toJson();
+    }
+    return data;
+  }
 }

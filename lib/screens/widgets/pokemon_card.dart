@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:pokemon_app/models/pokemon_type.dart';
 import 'package:pokemon_app/screens/pokemon_detail/pokemon_detail_screen.dart';
 import 'package:pokemon_app/screens/widgets/pokemon_type_container.dart';
-
-import '../../models/pokemon.dart';
+import 'package:provider/provider.dart';
+import '../../common/app_colors.dart';
+import '../../models/single_pokemon.dart';
+import '../../models/types.dart';
+import '../../providers/pokemon_provider.dart';
 
 class PokemonCard extends StatefulWidget {
-  PokemonCard({
+  final SinglePokemon pokemon;
+
+  const PokemonCard({
     Key? key,
-    required String pokemonID,
-  }) :
-        super(key: key);
+    required this.pokemon,
+  }) : super(key: key);
 
   @override
   State<PokemonCard> createState() => _PokemonCardState();
@@ -26,26 +29,20 @@ class _PokemonCardState extends State<PokemonCard> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      // child:
-      //
-      // InkWell(
-      //   onTap: _onCardTapped,
-      //   child: StreamBuilder<Pokemon>(
-      //     stream: widget._bloc.stream,
-      //     initialData: widget._bloc.pokemon,
-      //     builder: (context, snapshot) {
-      //       if (snapshot.hasData) {
-      //         final pokemon = snapshot.data!;
-      //         return buildCard(pokemon);
-      //       }
-      //       return buildLoading();
-      //     },
-      //   ),
-      // ),
+      child: InkWell(
+        onTap: _onCardTapped,
+        child:
+            Consumer<PokemonProvider>(builder: (context, pokemonProvider, _) {
+          if (pokemonProvider.allPokemon.isNotEmpty) {
+            return buildCard(widget.pokemon);
+          }
+          return buildLoading();
+        }),
+      ),
     );
   }
 
-  Widget buildCard(Pokemon pokemon) {
+  Widget buildCard(SinglePokemon pokemon) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -55,18 +52,20 @@ class _PokemonCardState extends State<PokemonCard> {
               Hero(
                 tag: 'pokemon/${pokemon.id}/type/container',
                 child: Container(
-                  decoration: BoxDecoration(color: Colors.amber),
+                  decoration: BoxDecoration(
+                      color: pokemonTypeColors[pokemon.types?.first.type?.name]!
+                          .withOpacity(0.5)),
                 ),
               ),
               Hero(
                 tag: 'pokemon/image/${pokemon.id}',
                 child: Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   clipBehavior: Clip.antiAlias,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/pokeball.png'),
+                      image: const AssetImage('assets/pokemon-ball.png'),
                       colorFilter: ColorFilter.mode(
                         Colors.white.withOpacity(0.03),
                         BlendMode.dstIn,
@@ -75,7 +74,9 @@ class _PokemonCardState extends State<PokemonCard> {
                     ),
                   ),
                   child: CachedNetworkImage(
-                    imageUrl: pokemon.sprites?.artwork?.frontDefault?.url ?? '',
+                    imageUrl:
+                        pokemon.sprites?.other?.officialArtwork?.frontDefault ??
+                            '',
                   ),
                 ),
               ),
@@ -87,7 +88,8 @@ class _PokemonCardState extends State<PokemonCard> {
             color: Theme.of(context).colorScheme.surface,
           ),
           child: Container(
-            constraints: BoxConstraints(minHeight: kMinInteractiveDimension),
+            constraints:
+                const BoxConstraints(minHeight: kMinInteractiveDimension),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -105,7 +107,7 @@ class _PokemonCardState extends State<PokemonCard> {
                               (pokemon.species?.name ?? pokemon.name)
                                   .toString()
                                   .toUpperCase(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -115,7 +117,7 @@ class _PokemonCardState extends State<PokemonCard> {
                           ),
                         ),
                         Text(
-                          pokemon.species?.genera ?? '',
+                          pokemon.species?.name ?? '',
                           style: TextStyle(
                             color: Theme.of(context)
                                 .colorScheme
@@ -131,12 +133,14 @@ class _PokemonCardState extends State<PokemonCard> {
                       ],
                     ),
                   ),
-                  SizedBox(width: 2,),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children:
-                        pokemon.types?.map(buildTypeContainer).toList() ?? [],
-                  )
+                  const SizedBox(
+                    width: 2,
+                  ),
+                  // Column(
+                  //   mainAxisAlignment: MainAxisAlignment.start,
+                  //   children:
+                  //       pokemon.types.map(buildTypeContainer).toList() ?? [],
+                  // )
                 ],
               ),
             ),
@@ -150,9 +154,9 @@ class _PokemonCardState extends State<PokemonCard> {
     return Column();
   }
 
-  Widget buildTypeContainer(PokemonType type) {
+  Widget buildTypeContainer(Types type) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 1),
+      margin: const EdgeInsets.symmetric(vertical: 1),
       child: PokemonTypeContainer(type: type),
     );
   }
@@ -160,7 +164,9 @@ class _PokemonCardState extends State<PokemonCard> {
   void _onCardTapped() {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
-        return PokemonDetailScreen();
+        return PokemonDetailScreen(
+          pokemon: widget.pokemon,
+        );
       }),
     );
   }

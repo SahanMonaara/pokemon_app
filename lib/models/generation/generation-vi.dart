@@ -1,11 +1,26 @@
-import 'generation.dart';
+import 'package:pokemon_app/models/home.dart';
 
-class GenerationVI<T> extends Generation<T> {
-  final T omegaRuby;
-  final T xy;
+class GenerationVi {
+  Home? omegarubyAlphasapphire;
+  Home? xY;
 
-  GenerationVI({
-    required this.omegaRuby,
-    required this.xy,
-  });
+  GenerationVi({this.omegarubyAlphasapphire, this.xY});
+
+  GenerationVi.fromJson(Map<String, dynamic> json) {
+    omegarubyAlphasapphire = json['omegaruby-alphasapphire'] != null
+        ? Home.fromJson(json['omegaruby-alphasapphire'])
+        : null;
+    xY = json['x-y'] != null ? Home.fromJson(json['x-y']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (omegarubyAlphasapphire != null) {
+      data['omegaruby-alphasapphire'] = omegarubyAlphasapphire!.toJson();
+    }
+    if (xY != null) {
+      data['x-y'] = xY!.toJson();
+    }
+    return data;
+  }
 }

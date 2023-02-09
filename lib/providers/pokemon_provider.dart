@@ -1,16 +1,16 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:pokemon_app/models/models.dart';
+import 'package:pokemon_app/models/pokemon_list.dart';
 import 'package:pokemon_app/services/pokemon_service.dart';
 import '../helpers/app_logger.dart';
+import '../models/single_pokemon.dart';
 import '../network/net_result.dart';
 
 class PokemonProvider with ChangeNotifier {
   bool isDataLoading = false;
   bool isDetailDataLoading = false;
-  List<Pokemon> pokemonList = [];
-  Pokemon ? currentPokemon;
-  List<String> favouriteList = [];
+  PokemonList? pokemonList;
+  List<SinglePokemon> allPokemon = [];
 
   /// It changes the value of isDataLoading to the value of the parameter status and
   /// then notifies all the listeners.
@@ -22,35 +22,22 @@ class PokemonProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  /// It changes the loading status of the detail data.
-  ///
-  /// Args:
-  ///   status (bool): The status of the loading.
-  changeDetailDataLoadingStatus(bool status) {
-    isDetailDataLoading = status;
-    notifyListeners();
-  }
-
-
-  Future<Result> getPokemonList() async {
-    Result result = await PokemonService().fetchPokemonList();
+  Future<NetResult> getPokemonList() async {
+    NetResult result = await PokemonService().fetchPokemonList();
     if (result.exception == null) {
-      pokemonList.clear();
-      pokemonList.addAll(result.result);
-      Log.debug("------pokemonList length--${pokemonList.length}");
+      pokemonList = result.netResult;
+      pokemonList?.results?.forEach((element) async {
+        allPokemon.clear();
+        try {
+          NetResult result = await PokemonService()
+              .fetchPokemonDetails(element.url!.split("/").elementAt(6));
+          allPokemon.add(result.netResult);
+        } catch (e) {
+          Log.debug("Error Loading Data");
+        }
+      });
       isDataLoading = false;
     }
-    notifyListeners();
-    return result;
-  }
-
-
-  Future<Result> getPokemonDetails(String id) async {
-    Result result = await PokemonService().fetchPokemonDetails(id);
-    if (result.exception == null) {
-      isDetailDataLoading = false;
-    }
-    currentPokemon = result.result;
     notifyListeners();
     return result;
   }

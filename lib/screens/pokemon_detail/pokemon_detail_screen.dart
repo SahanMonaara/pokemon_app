@@ -1,91 +1,100 @@
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:pokemon_app/common/string_extension.dart';
+import 'package:pokemon_app/common/app_colors.dart';
+import 'package:pokemon_app/models/types.dart';
 
-import '../../models/media/media.dart';
-import '../../models/pokemon.dart';
-import '../../models/pokemon_type.dart';
+import '../../models/single_pokemon.dart';
 import '../widgets/media_container.dart';
+import '../widgets/pokemon_stats_widget.dart';
 import '../widgets/pokemon_type_container.dart';
 
 class PokemonDetailScreen extends StatefulWidget {
   static const routeName = '/pokemon-detail-screen';
+  final SinglePokemon? pokemon;
+
   const PokemonDetailScreen({
     Key? key,
+    this.pokemon,
   }) : super(key: key);
 
   @override
-  _PokemonDetailScreenState createState() => _PokemonDetailScreenState();
+  PokemonDetailScreenState createState() => PokemonDetailScreenState();
 }
 
-class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
-
+class PokemonDetailScreenState extends State<PokemonDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    return Text("Detail Page");
-    // return StreamBuilder<Pokemon>(
-    //   stream: bloc.stream,
-    //   initialData: bloc.pokemon,
-    //   builder: (context, snapshot) {
-    //     if (snapshot.hasData) {
-    //       final pokemon = snapshot.data!;
-    //       return Material(
-    //         child: Stack(
-    //           children: [
-    //             Hero(
-    //               tag: 'pokemon/${pokemon.id}/type/container',
-    //               child: Container(
-    //                 decoration:  const BoxDecoration(color: Colors.amber),
-    //               ),
-    //             ),
-    //             CustomScrollView(
-    //               slivers: [
-    //                 SliverAppBar(
-    //                   backgroundColor: Colors.transparent,
-    //                   elevation: 0,
-    //                   pinned: true,
-    //                   title: Text(pokemon.name!.toUpperCase()),
-    //                 ),
-    //                 _buildImage(pokemon),
-    //                 _buildContent(pokemon),
-    //               ],
-    //             ),
-    //           ],
-    //         ),
-    //       );
-    //     }else{
-    //       return const Scaffold();
-    //     }
-    //   },
-    // );
+    return Material(
+      child: Stack(
+        children: [
+          Hero(
+            tag: 'pokemon/${widget.pokemon!.id}/type/container',
+            child: Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  pokemonTypeColors[widget.pokemon!.types?.first.type?.name] ??
+                      Colors.white,
+                  pokemonTypeColors[widget.pokemon!.types?.first.type?.name]!
+                      .withOpacity(0.4),
+                ],
+              )),
+            ),
+          ),
+          CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                backgroundColor:
+                    pokemonTypeColors[widget.pokemon!.types?.first.type?.name],
+                elevation: 0,
+                pinned: true,
+                leading: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(
+                      Icons.arrow_back,
+                      color: AppColors.black,
+                    )),
+                title: Text(
+                  widget.pokemon!.name!.toUpperCase(),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w800, color: AppColors.black),
+                ),
+              ),
+              _buildImage(widget.pokemon!),
+              _buildContent(widget.pokemon!),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
-
-  Widget _buildImage(Pokemon pokemon) {
+  Widget _buildImage(SinglePokemon pokemon) {
     return SliverToBoxAdapter(
       child: Hero(
         tag: 'pokemon/image/${pokemon.id}',
         child: Container(
           margin: const EdgeInsets.all(30),
           decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.white.withOpacity(0.1),
-              width: 8,
-            ),
             color: Colors.white.withOpacity(0.1),
             shape: BoxShape.circle,
             image: DecorationImage(
-              image: const AssetImage('assets/pokeball.png'),
+              image: const AssetImage('assets/pokemon-ball.png'),
               colorFilter: ColorFilter.mode(
-                Colors.white.withOpacity(0.05),
+                Colors.white.withOpacity(0.2),
                 BlendMode.dstIn,
               ),
               scale: 0.25,
             ),
           ),
           child: CachedNetworkImage(
-            imageUrl: pokemon.sprites?.artwork?.frontDefault?.url ?? '',
+            imageUrl:
+                pokemon.sprites?.other?.officialArtwork?.frontDefault ?? '',
             fit: BoxFit.fill,
           ),
         ),
@@ -93,35 +102,30 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
     );
   }
 
-  Widget _buildContent(Pokemon pokemon) {
+  Widget _buildContent(SinglePokemon pokemon) {
     return SliverToBoxAdapter(
-      child: Container(
-        color: Theme.of(context).colorScheme.surface.withOpacity(0.2),
-        child: ClipRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(
-              sigmaY: 6,
-              sigmaX: 6,
-            ),
-            child: Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildName(pokemon),
-                  _buildDescription(pokemon),
-                  _buildMedia(pokemon),
-                  const SizedBox(height: 200,)
-                ],
-              ),
-            ),
+      child: ClipRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaY: 6,
+            sigmaX: 6,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildName(pokemon),
+              _buildDescription(pokemon),
+              _buildMedia(pokemon),
+              PokemonBaseStats(pokemon),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildName(Pokemon pokemon) {
-    final shortDescription = pokemon.species?.genera?.toUpperCase();
+  Widget _buildName(SinglePokemon pokemon) {
+    final shortDescription = pokemon.species?.url?.toUpperCase();
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -137,14 +141,20 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
               children: [
                 Text(
                   (pokemon.species?.name ?? pokemon.name)!.toUpperCase(),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                    height: 1.4,
+                  ),
                 ),
                 Visibility(
                   visible: shortDescription?.isNotEmpty == true,
                   child: Text(
-                    shortDescription ??'',
+                    shortDescription ?? '',
                     style: const TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.w200,
+                      fontWeight: FontWeight.w400,
                       height: 1.4,
                     ),
                   ),
@@ -160,22 +170,22 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
     );
   }
 
-  Widget _buildTypeContainer(PokemonType type) {
+  Widget _buildTypeContainer(Types type) {
     return Container(
       margin: const EdgeInsets.symmetric(
         vertical: 4,
       ),
       child: PokemonTypeContainer(
         type: type,
-        size: 20,
+        size: 30,
       ),
     );
   }
 
-  Widget _buildDescription(Pokemon pokemon) {
-    final description = pokemon.species?.flavorTexts?.first.value;
+  Widget _buildDescription(SinglePokemon pokemon) {
+    final description = pokemon.forms?.first.name ?? '';
     return Visibility(
-      visible: description?.isNotEmpty == true,
+      visible: description.isNotEmpty == true,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -184,8 +194,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
             Text(
               'Description',
               style: TextStyle(
-                color:
-                    Theme.of(context).colorScheme.onSurface,
+                color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 22,
                 fontWeight: FontWeight.w800,
                 height: 1.4,
@@ -195,11 +204,10 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
               height: 10,
             ),
             Text(
-              description!.formatPokemonDescription(),
+              description,
               style: TextStyle(
-                color:
-                    Theme.of(context).colorScheme.onSurface,
-                fontWeight: FontWeight.w100,
+                color: Theme.of(context).colorScheme.onSurface,
+                fontWeight: FontWeight.w400,
                 fontSize: 16,
               ),
             ),
@@ -209,11 +217,11 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
     );
   }
 
-  Widget _buildMedia(Pokemon pokemon) {
+  Widget _buildMedia(SinglePokemon pokemon) {
     final sprites = [
-      pokemon.sprites?.defaultMedia,
-      pokemon.sprites?.dreamWorld,
-      pokemon.sprites?.home,
+      pokemon.sprites?.frontDefault,
+      pokemon.sprites?.other?.dreamWorld?.frontDefault,
+      pokemon.sprites?.other?.home?.frontDefault,
     ]..removeWhere(
         (element) => element == null,
       );
@@ -225,9 +233,9 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
           child: Text(
             'Media',
             style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.75),
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
+              color: Theme.of(context).colorScheme.onSurface,
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
               height: 1.4,
             ),
           ),
@@ -235,23 +243,22 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
         const SizedBox(
           height: 10,
         ),
-        Container(
+        SizedBox(
           height: 100,
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             scrollDirection: Axis.horizontal,
-            children: sprites
-                .map((sprite) => buildMediaContainer(sprite?.frontDefault))
-                .toList(),
+            children:
+                sprites.map((sprite) => buildMediaContainer(sprite)).toList(),
           ),
         )
       ],
     );
   }
 
-  Widget buildMediaContainer(Media? media) {
+  Widget buildMediaContainer(String? media) {
     return Visibility(
-      visible: media?.url != null,
+      visible: media != null,
       child: Container(
         margin: const EdgeInsets.only(right: 20),
         child: AspectRatio(

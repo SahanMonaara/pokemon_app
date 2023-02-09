@@ -1,9 +1,21 @@
-import 'generation.dart';
+import 'generation_colors.dart';
 
-class GenerationV<T> extends Generation<T> {
-  final T blackWhite;
+class GenerationV {
+  BlackWhite? blackWhite;
 
-  GenerationV({
-    required this.blackWhite,
-  });
+  GenerationV({this.blackWhite});
+
+  GenerationV.fromJson(Map<String, dynamic> json) {
+    blackWhite = json['black-white'] != null
+        ? BlackWhite.fromJson(json['black-white'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (blackWhite != null) {
+      data['black-white'] = blackWhite!.toJson();
+    }
+    return data;
+  }
 }
