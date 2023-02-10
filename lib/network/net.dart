@@ -288,13 +288,4 @@ class Net {
     result.netResult = response.body;
     return result;
   }
-
-  /// > It takes a url, gets the path parameters, and then adds the query parameters
-  /// to the end of the url
-  ///
-  /// Returns:
-  ///   A Future<String>
-  Future<String> processUrl() async {
-    return "${getPathParameters(url)}?${Uri(queryParameters: queryParam).query}";
-  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pokemon_app/common/custom_text_styles.dart';
 import 'package:pokemon_app/models/single_pokemon.dart';
 import 'package:pokemon_app/models/stats.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -21,13 +22,9 @@ class _PokemonBaseStatsState extends State<PokemonBaseStats> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          const Text(
+           Text(
             'Statistics',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
-              height: 1.4,
-            ),
+            style: CustomTextStyles.titleStyle()
           ),
           buildStats(widget.pokemon.stats),
         ],
@@ -72,17 +69,12 @@ class Stat extends StatelessWidget {
           flex: 2,
           child: Text(
             label!,
-            style: TextStyle(
-                color: Theme.of(context)
-                    .textTheme
-                    .caption!
-                    .color!
-                    .withOpacity(0.6)),
+            style: CustomTextStyles.regularStyle(),
           ),
         ),
         Expanded(
           flex: 1,
-          child: Text('$value'),
+          child: Text('$value',style: CustomTextStyles.regularStyle()),
         ),
         Expanded(
           flex: 5,

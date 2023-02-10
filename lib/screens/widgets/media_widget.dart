@@ -2,11 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class MediaContainer extends StatelessWidget {
+class MediaWidget extends StatelessWidget {
   final String? media;
   final BoxFit? fit;
 
-  const MediaContainer({
+  const MediaWidget({
     Key? key,
     required this.media,
     this.fit,

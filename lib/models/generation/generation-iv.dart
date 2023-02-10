@@ -1,4 +1,6 @@
-import 'generation_colors.dart';
+
+
+import 'package:pokemon_app/models/generation/generation_colors.dart';
 
 class GenerationIv {
   DiamondPearl? diamondPearl;

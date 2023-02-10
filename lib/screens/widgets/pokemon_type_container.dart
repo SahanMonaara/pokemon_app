@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../common/app_colors.dart';
+import '../../common/custom_text_styles.dart';
 import '../../models/types.dart';
 
 class PokemonTypeContainer extends StatelessWidget {
@@ -27,6 +28,7 @@ class PokemonTypeContainer extends StatelessWidget {
       child: Text(
         type.type!.name!.toUpperCase(),
         maxLines: 1,
+        style: CustomTextStyles.regularStyle(),
       ),
     );
   }

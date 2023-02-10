@@ -17,15 +17,16 @@ class PokemonService {
 
   PokemonService._internal();
 
-  /// It fetches the list of launches from the SpaceX API.
+
+  /// It fetches the list of pokemons from the server.
   ///
   /// Returns:
-  ///   Result object
+  ///   NetResult
   Future<NetResult> fetchPokemonList() async {
     NetResult result = NetResult();
     try {
       var net = Net(
-        url: URL.GET_POKEMON_LIST,
+        url: URL.getPokemonListURL,
         method: NetMethod.get,
       );
 
@@ -46,18 +47,19 @@ class PokemonService {
     }
   }
 
-  /// It fetches the launch details from the server.
+
+  /// It fetches the pokemon details from the server.
   ///
   /// Args:
-  ///   id (String): The id of the launch you want to fetch details for.
+  ///   id (String): The id of the pokemon you want to fetch details for.
   ///
   /// Returns:
-  ///   Result object
+  ///   NetResult
   Future<NetResult> fetchPokemonDetails(String id) async {
     NetResult result = NetResult();
     try {
       var net = Net(
-          url: URL.GET_POKEMON_DETAILS,
+          url: URL.getPokemonDetailsURL,
           method: NetMethod.get,
           pathParam: {'{id}': id});
 

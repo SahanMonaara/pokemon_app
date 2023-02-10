@@ -5,7 +5,6 @@ class AppColors {
   static const Color shadowColor = Color(0XFF3A5DA8);
   static const Color black = Color(0XFF000000);
   static const Color bgColor = Colors.white;
-
   static const Color pokemonTypeFireColor = Color(0XFFf19066);
   static const Color pokemonTypeGrassColor = Colors.lightGreen;
   static const Color pokemonTypePoisonColor = Colors.deepPurple;
@@ -24,18 +23,9 @@ class AppColors {
   static const Color pokemonTypeDragonColor = Color(0xFF4926A7);
   static const Color pokemonTypeGhostColor = Color(0xFF464564);
   static const Color pokemonTypeIceColor = Color(0xFFA6D0F1);
-
-//GenerationColors
-  static const Color generationIColor = Color(0xFF4E4E4B);
-  static const Color generationIIColor = Color(0xFF545449);
-  static const Color generationIIIColor = Color(0xFF696950);
-  static const Color generationIVColor = Color(0xFF62623C);
-  static const Color generationVColor = Color(0xFF6B5D3A);
-  static const Color generationVIColor = Color(0xFF7C6646);
-  static const Color generationVIIColor = Color(0xFF91705A);
-  static const Color generationVIIIColor = Color(0xFF9B6831);
 }
 
+/// A map of pokemon types to their colors.
 Map<String, Color> pokemonTypeColors = {
   'fire': AppColors.pokemonTypeFireColor,
   'grass': AppColors.pokemonTypeGrassColor,

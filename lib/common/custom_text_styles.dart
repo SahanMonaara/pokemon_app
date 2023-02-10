@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class CustomTextStyles {
   static TextStyle titleStyle() {
     return const TextStyle(
-        color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20);
+        color: Colors.black, fontWeight: FontWeight.w800, fontSize: 21);
   }
 
   static TextStyle subTitleStyle() {
@@ -16,7 +16,7 @@ class CustomTextStyles {
 
   static TextStyle regularStyle() {
     return const TextStyle(
-      fontSize: 14,
+      fontSize: 11,
       fontWeight: FontWeight.normal,
       color: Colors.black,
     );

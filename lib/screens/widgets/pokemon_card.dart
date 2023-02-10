@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:pokemon_app/common/custom_text_styles.dart';
 import 'package:pokemon_app/screens/pokemon_detail/pokemon_detail_screen.dart';
 import 'package:pokemon_app/screens/widgets/pokemon_type_container.dart';
 import 'package:provider/provider.dart';
@@ -107,10 +108,7 @@ class _PokemonCardState extends State<PokemonCard> {
                               (pokemon.species?.name ?? pokemon.name)
                                   .toString()
                                   .toUpperCase(),
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
+                              style: CustomTextStyles.subTitleStyle(),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -118,15 +116,7 @@ class _PokemonCardState extends State<PokemonCard> {
                         ),
                         Text(
                           pokemon.species?.name ?? '',
-                          style: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withOpacity(0.8),
-                            fontWeight: FontWeight.w300,
-                            fontSize: 11,
-                            height: 1.4,
-                          ),
+                          style: CustomTextStyles.regularStyle(),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         )
@@ -136,11 +126,6 @@ class _PokemonCardState extends State<PokemonCard> {
                   const SizedBox(
                     width: 2,
                   ),
-                  // Column(
-                  //   mainAxisAlignment: MainAxisAlignment.start,
-                  //   children:
-                  //       pokemon.types.map(buildTypeContainer).toList() ?? [],
-                  // )
                 ],
               ),
             ),
@@ -151,7 +136,7 @@ class _PokemonCardState extends State<PokemonCard> {
   }
 
   Widget buildLoading() {
-    return Column();
+    return const CircularProgressIndicator();
   }
 
   Widget buildTypeContainer(Types type) {

@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:pokemon_app/shimmers/shimmer_config.dart';
 import 'package:shimmer/shimmer.dart';
-import '../common/app_colors.dart';
 
-class TripCardShimmer extends StatelessWidget {
+class CardShimmer extends StatelessWidget {
   final int itemCount;
   final Axis axis;
   final EdgeInsets padding;
   final bool primary;
   final bool shrinkWrap;
 
-  const TripCardShimmer(
+  const CardShimmer(
       {Key? key,
-      this.itemCount = 10,
+      this.itemCount = 50,
       this.axis = Axis.vertical,
       this.padding = const EdgeInsets.only(right: 10),
       this.primary = false,
@@ -21,121 +20,51 @@ class TripCardShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      scrollDirection: axis,
-      itemCount: itemCount,
-      primary: primary,
-      shrinkWrap: shrinkWrap,
-      itemBuilder: (context, index) {
-        return Shimmer.fromColors(
-          direction: ShimmerConfig.shimmerDirection,
-          baseColor: ShimmerConfig.baseColor,
-          highlightColor: ShimmerConfig.highlightColor,
-          period: ShimmerConfig.period,
-          child: Container(
-            height: 250,
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-            margin: const EdgeInsets.only(bottom: 20),
-            decoration: BoxDecoration(
-              color: AppColors.bgColor,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              width: 20,
-                              height: 20,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Container(
-                              width: 20,
-                              height: 10,
-                              color: Colors.white,
-                            ),
-                          ],
+    return CustomScrollView(
+      slivers: [
+        SliverGrid(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
+            childAspectRatio: 0.9,
+          ),
+          delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+              return Shimmer.fromColors(
+                direction: ShimmerConfig.shimmerDirection,
+                baseColor: ShimmerConfig.baseColor,
+                highlightColor: ShimmerConfig.highlightColor,
+                period: ShimmerConfig.period,
+                child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(10),
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: const AssetImage('assets/pokemon-ball.png'),
+                        colorFilter: ColorFilter.mode(
+                          Colors.white.withOpacity(0.03),
+                          BlendMode.dstIn,
                         ),
-                        Container(
-                          margin:
-                              const EdgeInsets.only(left: 9, top: 5, bottom: 5),
-                          width: 2,
-                          height: 20,
-                          color: Colors.white,
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              width: 20,
-                              height: 20,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Container(
-                              width: 20,
-                              height: 10,
-                              color: Colors.white,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Container(
-                            width: 20,
-                            height: 10,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 15,
-                            height: 10,
-                            color: Colors.white,
-                          ),
-                        ],
+                        scale: 0.2,
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 10,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                  )
+                )
+              );
+            },
+            addSemanticIndexes: true,
+            childCount: 50,
           ),
-        );
-      },
+        ),
+      ],
     );
   }
 }

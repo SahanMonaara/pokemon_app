@@ -2,10 +2,11 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pokemon_app/common/app_colors.dart';
+import 'package:pokemon_app/common/custom_text_styles.dart';
 import 'package:pokemon_app/models/types.dart';
 
 import '../../models/single_pokemon.dart';
-import '../widgets/media_container.dart';
+import '../widgets/media_widget.dart';
 import '../widgets/pokemon_stats_widget.dart';
 import '../widgets/pokemon_type_container.dart';
 
@@ -61,8 +62,7 @@ class PokemonDetailScreenState extends State<PokemonDetailScreen> {
                     )),
                 title: Text(
                   widget.pokemon!.name!.toUpperCase(),
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w800, color: AppColors.black),
+                  style: CustomTextStyles.titleStyle(),
                 ),
               ),
               _buildImage(widget.pokemon!),
@@ -141,22 +141,13 @@ class PokemonDetailScreenState extends State<PokemonDetailScreen> {
               children: [
                 Text(
                   (pokemon.species?.name ?? pokemon.name)!.toUpperCase(),
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                    height: 1.4,
-                  ),
+                  style: CustomTextStyles.titleStyle(),
                 ),
                 Visibility(
                   visible: shortDescription?.isNotEmpty == true,
                   child: Text(
                     shortDescription ?? '',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      height: 1.4,
-                    ),
+                    style:CustomTextStyles.subTitleStyle()
                   ),
                 ),
               ],
@@ -193,23 +184,13 @@ class PokemonDetailScreenState extends State<PokemonDetailScreen> {
           children: [
             Text(
               'Description',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontSize: 22,
-                fontWeight: FontWeight.w800,
-                height: 1.4,
-              ),
-            ),
+              style:CustomTextStyles.titleStyle()),
             const SizedBox(
               height: 10,
             ),
             Text(
               description,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontWeight: FontWeight.w400,
-                fontSize: 16,
-              ),
+              style: CustomTextStyles.subTitleStyle()
             ),
           ],
         ),
@@ -232,12 +213,7 @@ class PokemonDetailScreenState extends State<PokemonDetailScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             'Media',
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface,
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
-              height: 1.4,
-            ),
+            style: CustomTextStyles.titleStyle()
           ),
         ),
         const SizedBox(
@@ -263,7 +239,7 @@ class PokemonDetailScreenState extends State<PokemonDetailScreen> {
         margin: const EdgeInsets.only(right: 20),
         child: AspectRatio(
           aspectRatio: 1,
-          child: MediaContainer(
+          child: MediaWidget(
             media: media!,
             fit: BoxFit.contain,
           ),

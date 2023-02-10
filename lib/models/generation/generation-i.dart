@@ -15,12 +15,12 @@ class GenerationI {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    if (this.redBlue != null) {
-      data['red-blue'] = this.redBlue!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (redBlue != null) {
+      data['red-blue'] = redBlue!.toJson();
     }
-    if (this.yellow != null) {
-      data['yellow'] = this.yellow!.toJson();
+    if (yellow != null) {
+      data['yellow'] = yellow!.toJson();
     }
     return data;
   }

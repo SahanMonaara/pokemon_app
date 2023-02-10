@@ -1,18 +1,20 @@
-import '../official_artwork.dart';
-import 'generation_colors.dart';
+
+
+import 'package:pokemon_app/models/generation/generation_colors.dart';
+import 'package:pokemon_app/models/official_artwork.dart';
 
 class GenerationIii {
   OfficialArtwork? emerald;
-  FireredLeafgreen? fireredLeafgreen;
+  FireredLeafgreen? fireRedLeafGreen;
   FireredLeafgreen? rubySapphire;
 
-  GenerationIii({this.emerald, this.fireredLeafgreen, this.rubySapphire});
+  GenerationIii({this.emerald, this.fireRedLeafGreen, this.rubySapphire});
 
   GenerationIii.fromJson(Map<String, dynamic> json) {
     emerald = json['emerald'] != null
         ? OfficialArtwork.fromJson(json['emerald'])
         : null;
-    fireredLeafgreen = json['firered-leafgreen'] != null
+    fireRedLeafGreen = json['firered-leafgreen'] != null
         ? FireredLeafgreen.fromJson(json['firered-leafgreen'])
         : null;
     rubySapphire = json['ruby-sapphire'] != null
@@ -25,8 +27,8 @@ class GenerationIii {
     if (emerald != null) {
       data['emerald'] = emerald!.toJson();
     }
-    if (fireredLeafgreen != null) {
-      data['firered-leafgreen'] = fireredLeafgreen!.toJson();
+    if (fireRedLeafGreen != null) {
+      data['firered-leafgreen'] = fireRedLeafGreen!.toJson();
     }
     if (rubySapphire != null) {
       data['ruby-sapphire'] = rubySapphire!.toJson();
